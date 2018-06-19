@@ -1,9 +1,11 @@
 package com.why.coolweather.util;
 
 import android.text.TextUtils;
+import com.google.gson.Gson;
 import com.why.coolweather.db.City;
 import com.why.coolweather.db.County;
 import com.why.coolweather.db.Province;
+import com.why.coolweather.gson.Weather;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,5 +77,17 @@ public class Utility {
         }
 
         return false;
+    }
+
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject object = new JSONObject(response);
+            JSONArray array = object.getJSONArray("HeWeather");
+            String weatherContent = array.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
